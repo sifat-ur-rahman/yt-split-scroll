@@ -4,10 +4,7 @@ A lightweight Chrome extension that splits the YouTube watch page into two
 independent scroll areas — the left column (player, description, comments)
 and the right column (suggested videos) — so scrolling one never moves the
 other.
-
-![Manifest Version](https://img.shields.io/badge/manifest-v3-blue)
-![Version](https://img.shields.io/badge/version-1.0.0-green)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![image](https://sifat-ur-rahman.vercel.app/projects/yt-split-scroll.gif)
 
 ---
 
