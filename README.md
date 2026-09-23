@@ -47,8 +47,8 @@ zip attached — no cloning or build step required.
 3. Extract the zip to a folder on your computer.
 4. Open your browser's extensions page:
    - Chrome: go to `chrome://extensions`
-   - Brave: go to `brave://extensions`
-   - Edge: go to `edge://extensions`
+   <!-- - Brave: go to `brave://extensions`
+   - Edge: go to `edge://extensions` -->
 5. Turn on **Developer mode** (top-right corner of the extensions page).
 6. Click **Load unpacked** and select the extracted folder (the one
    containing `manifest.json`).
