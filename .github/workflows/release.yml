@@ -22,8 +22,8 @@ jobs:
 
       - name: Zip the extension
         run: |
-          cd yt-split-scroll
-          zip -r "../yt-split-scroll-${{ steps.version.outputs.VERSION }}.zip" . -x ".*"
+          zip -r "yt-split-scroll-${{ steps.version.outputs.VERSION }}.zip" . \
+            -x ".*" -x ".git/*" -x ".github/*"
 
       - name: Create GitHub Release with zip asset
         uses: softprops/action-gh-release@v2
