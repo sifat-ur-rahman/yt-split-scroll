@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>YouTube Split Scroll</title>
+<style>
+  :root {
+    --ink: #101114;
+    --panel: #17181c;
+    --line: rgba(255,255,255,.10);
+    --text: #f2f2f3;
+    --muted: #9aa0a6;
+    --live: #ff3d3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    width: 306px;
+    background: var(--ink);
+    color: var(--text);
+    font: 400 13px/1.5 "Roboto", "Segoe UI", system-ui, sans-serif;
+  }
+  header {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  h1 {
+    margin: 0 0 3px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .005em;
+  }
+  header p { margin: 0; color: var(--muted); font-size: 12px; }
+
+  /* Diagram: the watch page, two panes, each with its own scroll track. */
+  .preview {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 6px;
+    padding: 14px 16px 4px;
+  }
+  .pane {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px;
+    background: #1c1d22;
+    min-height: 86px;
+    overflow: hidden;
+  }
+  .screen { border-radius: 3px; background: #33353d; height: 32px; margin-bottom: 6px; }
+  .line { height: 5px; border-radius: 2px; background: #2b2d34; margin-bottom: 5px; }
+  .line.w70 { width: 70%; }
+  .line.w45 { width: 45%; }
+  .row { display: flex; gap: 5px; margin-bottom: 6px; align-items: center; }
+  .thumb { width: 26px; height: 15px; border-radius: 3px; background: #33353d; flex: none; }
+  .row .line { flex: 1; margin: 0; }
+  .track {
+    position: absolute;
+    top: 7px;
+    right: 3px;
+    bottom: 7px;
+    width: 3px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.07);
+  }
+  .track span {
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 38%;
+    border-radius: 99px;
+    background: #4c4f58;
+  }
+  body[data-on="true"] .track span { background: var(--live); }
+  body[data-on="true"] .pane-a .track span { animation: glideA 4.2s ease-in-out infinite; }
+  body[data-on="true"] .pane-b .track span { animation: glideB 4.2s ease-in-out infinite; }
+  @keyframes glideA { 0%,45%,100% { top: 0; } 20% { top: 62%; } }
+  @keyframes glideB { 0%,50%,100% { top: 62%; } 75% { top: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    body[data-on="true"] .pane-a .track span,
+    body[data-on="true"] .pane-b .track span { animation: none; }
+  }
+  .caption {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 6px;
+    padding: 0 16px 14px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .rows { border-top: 1px solid var(--line); }
+  .row-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .row-item + .row-item { border-top: 1px solid var(--line); }
+  .row-item strong { display: block; font-size: 13px; font-weight: 500; }
+  .row-item small { color: var(--muted); font-size: 11.5px; }
+
+  .switch { position: relative; flex: none; width: 38px; height: 22px; }
+  .switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+  .switch span {
+    position: absolute; inset: 0;
+    background: #3a3c44;
+    border-radius: 99px;
+    transition: background .16s ease;
+    pointer-events: none;
+  }
+  .switch span::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #f2f2f3;
+    transition: transform .16s ease;
+  }
+  .switch input:checked + span { background: var(--live); }
+  .switch input:checked + span::after { transform: translateX(16px); }
+  .switch input:focus-visible + span { outline: 2px solid #62a0ff; outline-offset: 2px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 10px 16px 13px;
+    color: var(--muted);
+    font-size: 11.5px;
+  }
+</style>
+</head>
+<body data-on="true">
+  <header>
+    <h1>YouTube Split Scroll</h1>
+    <p>Two panes on the watch page, two scrollbars.</p>
+  </header>
+
+  <div class="preview" aria-hidden="true">
+    <div class="pane pane-a">
+      <div class="screen"></div>
+      <div class="line w70"></div>
+      <div class="line w45"></div>
+      <div class="line"></div>
+      <div class="line w70"></div>
+      <div class="track"><span></span></div>
+    </div>
+    <div class="pane pane-b">
+      <div class="row"><i class="thumb"></i><div class="line"></div></div>
+      <div class="row"><i class="thumb"></i><div class="line"></div></div>
+      <div class="row"><i class="thumb"></i><div class="line"></div></div>
+      <div class="row"><i class="thumb"></i><div class="line"></div></div>
+      <div class="track"><span></span></div>
+    </div>
+  </div>
+  <div class="caption"><div>Video and comments</div><div>Up next</div></div>
+
+  <div class="rows">
+    <label class="row-item" for="enabled">
+      <span>
+        <strong>Split scroll</strong>
+        <small id="stateText">Each column scrolls on its own</small>
+      </span>
+      <span class="switch"><input type="checkbox" id="enabled"><span></span></span>
+    </label>
+
+    <label class="row-item" for="stickyPlayer">
+      <span>
+        <strong>Pin the player</strong>
+        <small>Keep the video in view while comments scroll</small>
+      </span>
+      <span class="switch"><input type="checkbox" id="stickyPlayer"><span></span></span>
+    </label>
+
+    <label class="row-item" for="showButton">
+      <span>
+        <strong>On-page button</strong>
+        <small>Show the toggle in the corner of the watch page</small>
+      </span>
+      <span class="switch"><input type="checkbox" id="showButton"><span></span></span>
+    </label>
+  </div>
+
+  <footer>Theater and fullscreen keep YouTube's normal scrolling.</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

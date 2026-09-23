@@ -1,0 +1,78 @@
+/* =========================================================
+   YouTube Split Scroll — layout styles
+   Everything is gated behind html.yss-on, which content.js
+   only adds on a normal (non-theater, non-fullscreen) watch
+   page while the extension is switched on.
+   ========================================================= */
+
+html.yss-on,
+html.yss-on body {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+/* The two-column wrapper becomes the viewport-height frame. */
+html.yss-on ytd-watch-flexy #columns.ytd-watch-flexy {
+  display: flex !important;
+  align-items: flex-start !important;
+  height: calc(100vh - var(--yss-top, 56px)) !important;
+  max-height: calc(100vh - var(--yss-top, 56px)) !important;
+  overflow: hidden !important;
+}
+
+/* Each column scrolls on its own. */
+html.yss-on ytd-watch-flexy #primary.ytd-watch-flexy,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  padding-bottom: 48px !important;
+}
+
+html:not([dark]).yss-on ytd-watch-flexy #primary.ytd-watch-flexy,
+html:not([dark]).yss-on ytd-watch-flexy #secondary.ytd-watch-flexy {
+  scrollbar-color: rgba(0, 0, 0, 0.24) transparent;
+}
+
+/* Undo YouTube's own sticky offsets — they fight a scroll container. */
+html.yss-on ytd-watch-flexy #secondary-inner.ytd-watch-flexy,
+html.yss-on ytd-watch-flexy #panels.ytd-watch-flexy,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy > * {
+  position: static !important;
+  top: auto !important;
+}
+
+html.yss-on ytd-watch-flexy #secondary-split-scroll-spacer.ytd-watch-flexy {
+  display: none !important;
+}
+
+/* Optional: keep the player pinned at the top of its own column. */
+html.yss-on.yss-sticky-player ytd-watch-flexy #primary-inner.ytd-watch-flexy > #player.ytd-watch-flexy {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 3;
+  background: var(--yt-spec-base-background, #0f0f0f);
+}
+
+/* Slim scrollbars on Chromium. */
+html.yss-on ytd-watch-flexy #primary.ytd-watch-flexy::-webkit-scrollbar,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy::-webkit-scrollbar {
+  width: 8px;
+}
+html.yss-on ytd-watch-flexy #primary.ytd-watch-flexy::-webkit-scrollbar-thumb,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.45);
+  border-radius: 99px;
+}
+html.yss-on ytd-watch-flexy #primary.ytd-watch-flexy::-webkit-scrollbar-thumb:hover,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.7);
+}
+html.yss-on ytd-watch-flexy #primary.ytd-watch-flexy::-webkit-scrollbar-track,
+html.yss-on ytd-watch-flexy #secondary.ytd-watch-flexy::-webkit-scrollbar-track {
+  background: transparent;
+}
